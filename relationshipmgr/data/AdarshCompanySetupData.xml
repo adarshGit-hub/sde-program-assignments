@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!-- Activity 1: Company Information (Adarsh) -->
+    <Party partyId="ADARSH_COMPANY" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>
+    <PartyGroup partyId="ADARSH_COMPANY" groupName="Adarsh Company" logoImageUrl="/resources/uploads/images/company_logo.png"/>
+
+    <!-- Activity 2: Company Roles -->
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="BILL_FROM_VENDOR"/>
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="SHIP_FROM_VENDOR"/>
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="SUPPLIER_AGENT"/>
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="SUPPLIER"/>
+    <PartyRole partyId="ADARSH_COMPANY" roleTypeId="VENDOR"/>
+
+    <!-- Activity 3: Product Store Group -->
+    <ProductStoreGroup productStoreGroupId="ADARSH_STORE_GROUP" productStoreGroupName="Adarsh Store Group" description="Adarsh Store Group"/>
+
+    <!-- Activity 4: Product Store -->
+    <ProductStore productStoreId="ADARSH_STORE" storeName="Adarsh Store" 
+                  primaryStoreGroupId="ADARSH_STORE_GROUP" payToPartyId="ADARSH_COMPANY"
+                  inventoryFacilityId="WebStoreWarehouse" 
+                  isDemoStore="Y" reserveInventory="N"
+                  defaultLocaleString="en_US" defaultCurrencyUomId="USD"
+                  salesChannelEnumId="WEB_SALES_CHANNEL"
+                  orderConfirmationReturnRes="Y" autoApproveOrder="Y" />
+</entity-engine-xml>

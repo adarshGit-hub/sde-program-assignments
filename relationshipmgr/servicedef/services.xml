@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/services.xsd">
+    <description>Relationship Manager Services</description>
+    <vendor>Apache OFBiz</vendor>
+
+    <!-- Party Services -->
+    <service name="createParty" default-entity-name="Party" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a Party</description>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateParty" default-entity-name="Party" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a Party</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <!-- Person Services -->
+    <service name="createPerson" engine="groovy" auth="true"
+             location="component://relationshipmgr/groovyScripts/person/CreatePerson.groovy" invoke="createPerson">
+        <description>Create a Person record. If partyId is not supplied, a Party is created first.</description>
+        <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="partyTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="birthDate" type="java.sql.Date" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updatePerson" default-entity-name="Person" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a Person</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <!-- internal helper called by createPerson Groovy script -->
+    <service name="createPersonEntityAuto" default-entity-name="Person" engine="entity-auto" invoke="create" auth="true">
+        <description>Internal helper to create Person record</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+</services>

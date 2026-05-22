@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!-- Educational Role Types -->
+    <RoleType roleTypeId="COLLEGE" description="College" parentTypeId="ORGANIZATION_UNIT"/>
+    <RoleType roleTypeId="EDU_DEPARTMENT" description="Educational Department" parentTypeId="ORGANIZATION_UNIT"/>
+    <RoleType roleTypeId="STUDENT" description="Student" parentTypeId="INTERNAL_ORGANIZATIO"/>
+    <RoleType roleTypeId="TEACHER" description="Teaching Staff" parentTypeId="EMPLOYEE"/>
+
+    <!-- Educational Relationship Types -->
+    <PartyRelationshipType partyRelationshipTypeId="EDU_ENROLLMENT" description="Student Enrollment" 
+                           roleTypeIdValidFrom="STUDENT" roleTypeIdValidTo="COLLEGE"/>
+    <PartyRelationshipType partyRelationshipTypeId="EDU_EMPLOYMENT" description="Teaching Employment" 
+                           roleTypeIdValidFrom="TEACHER" roleTypeIdValidTo="EDU_DEPARTMENT"/>
+</entity-engine-xml>

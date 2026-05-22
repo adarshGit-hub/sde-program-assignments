@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!-- ======================================================== -->
+    <!-- Educational Institutions (Colleges and Departments)      -->
+    <!-- ======================================================== -->
+    
+    <!-- Springfield University (College) -->
+    <Party partyId="EDU_COLLEGE_01" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>
+    <PartyGroup partyId="EDU_COLLEGE_01" groupName="Springfield University"/>
+    <PartyRole partyId="EDU_COLLEGE_01" roleTypeId="COLLEGE"/>
+
+    <!-- Computer Science Department -->
+    <Party partyId="EDU_DEPT_CS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>
+    <PartyGroup partyId="EDU_DEPT_CS" groupName="Department of Computer Science"/>
+    <PartyRole partyId="EDU_DEPT_CS" roleTypeId="EDU_DEPARTMENT"/>
+    
+    <!-- Physics Department -->
+    <Party partyId="EDU_DEPT_PHYS" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>
+    <PartyGroup partyId="EDU_DEPT_PHYS" groupName="Department of Physics"/>
+    <PartyRole partyId="EDU_DEPT_PHYS" roleTypeId="EDU_DEPARTMENT"/>
+
+    <!-- Department-to-College Relationships -->
+    <PartyRelationship partyIdFrom="EDU_DEPT_CS" partyIdTo="EDU_COLLEGE_01" roleTypeIdFrom="EDU_DEPARTMENT" roleTypeIdTo="COLLEGE" 
+                       fromDate="2024-01-01 00:00:00.0" partyRelationshipTypeId="GROUP_ROLLUP"/>
+    <PartyRelationship partyIdFrom="EDU_DEPT_PHYS" partyIdTo="EDU_COLLEGE_01" roleTypeIdFrom="EDU_DEPARTMENT" roleTypeIdTo="COLLEGE" 
+                       fromDate="2024-01-01 00:00:00.0" partyRelationshipTypeId="GROUP_ROLLUP"/>
+
+    <!-- ======================================================== -->
+    <!-- Teaching Staff                                           -->
+    <!-- ======================================================== -->
+
+    <!-- Alan Turing (CS Professor) -->
+    <Party partyId="STAFF_TURING" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="STAFF_TURING" firstName="Alan" lastName="Turing"/>
+    <PartyRole partyId="STAFF_TURING" roleTypeId="TEACHER"/>
+    <PartyRelationship partyIdFrom="STAFF_TURING" partyIdTo="EDU_DEPT_CS" roleTypeIdFrom="TEACHER" roleTypeIdTo="EDU_DEPARTMENT" 
+                       fromDate="2024-01-01 00:00:00.0" partyRelationshipTypeId="EDU_EMPLOYMENT"/>
+
+    <!-- Albert Einstein (Physics Professor) -->
+    <Party partyId="STAFF_EINSTEIN" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="STAFF_EINSTEIN" firstName="Albert" lastName="Einstein"/>
+    <PartyRole partyId="STAFF_EINSTEIN" roleTypeId="TEACHER"/>
+    <PartyRelationship partyIdFrom="STAFF_EINSTEIN" partyIdTo="EDU_DEPT_PHYS" roleTypeIdFrom="TEACHER" roleTypeIdTo="EDU_DEPARTMENT" 
+                       fromDate="2024-01-01 00:00:00.0" partyRelationshipTypeId="EDU_EMPLOYMENT"/>
+
+    <!-- ======================================================== -->
+    <!-- Students                                                 -->
+    <!-- ======================================================== -->
+
+    <!-- Jane Doe (CS Student) -->
+    <Party partyId="STUDENT_JANE" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="STUDENT_JANE" firstName="Jane" lastName="Doe"/>
+    <PartyRole partyId="STUDENT_JANE" roleTypeId="STUDENT"/>
+    <PartyRelationship partyIdFrom="STUDENT_JANE" partyIdTo="EDU_COLLEGE_01" roleTypeIdFrom="STUDENT" roleTypeIdTo="COLLEGE" 
+                       fromDate="2024-09-01 00:00:00.0" partyRelationshipTypeId="EDU_ENROLLMENT"/>
+
+    <!-- John Smith (Physics Student) -->
+    <Party partyId="STUDENT_JOHN" partyTypeId="PERSON" statusId="PARTY_ENABLED"/>
+    <Person partyId="STUDENT_JOHN" firstName="John" lastName="Smith"/>
+    <PartyRole partyId="STUDENT_JOHN" roleTypeId="STUDENT"/>
+    <PartyRelationship partyIdFrom="STUDENT_JOHN" partyIdTo="EDU_COLLEGE_01" roleTypeIdFrom="STUDENT" roleTypeIdTo="COLLEGE" 
+                       fromDate="2024-09-01 00:00:00.0" partyRelationshipTypeId="EDU_ENROLLMENT"/>
+
+    <!-- ======================================================== -->
+    <!-- Contact Mechanisms (Emails, Phones, Addresses)           -->
+    <!-- ======================================================== -->
+
+    <!-- Springfield University Website -->
+    <ContactMech contactMechId="CM_COLLEGE_WEB" contactMechTypeId="WEB_ADDRESS" infoString="www.springfield.edu"/>
+    <PartyContactMech partyId="EDU_COLLEGE_01" contactMechId="CM_COLLEGE_WEB" fromDate="2024-01-01 00:00:00.0"/>
+    <PartyContactMechPurpose partyId="EDU_COLLEGE_01" contactMechId="CM_COLLEGE_WEB" contactMechPurposeTypeId="PRIMARY_WEB_URL" fromDate="2024-01-01 00:00:00.0"/>
+
+    <!-- Jane Doe Email -->
+    <ContactMech contactMechId="CM_JANE_EMAIL" contactMechTypeId="EMAIL_ADDRESS" infoString="jane.doe@springfield.edu"/>
+    <PartyContactMech partyId="STUDENT_JANE" contactMechId="CM_JANE_EMAIL" fromDate="2024-09-01 00:00:00.0"/>
+    <PartyContactMechPurpose partyId="STUDENT_JANE" contactMechId="CM_JANE_EMAIL" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2024-09-01 00:00:00.0"/>
+
+    <!-- Albert Einstein Postal Address -->
+    <ContactMech contactMechId="CM_EINSTEIN_ADDR" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="CM_EINSTEIN_ADDR" address1="112 Mercer Street" city="Princeton" postalCode="08540" countryGeoId="USA" stateProvinceGeoId="NJ"/>
+    <PartyContactMech partyId="STAFF_EINSTEIN" contactMechId="CM_EINSTEIN_ADDR" fromDate="2024-01-01 00:00:00.0"/>
+    <PartyContactMechPurpose partyId="STAFF_EINSTEIN" contactMechId="CM_EINSTEIN_ADDR" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2024-01-01 00:00:00.0"/>
+
+    <!-- Alan Turing Phone Number -->
+    <ContactMech contactMechId="CM_TURING_PHONE" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="CM_TURING_PHONE" countryCode="1" areaCode="609" contactNumber="555-0123"/>
+    <PartyContactMech partyId="STAFF_TURING" contactMechId="CM_TURING_PHONE" fromDate="2024-01-01 00:00:00.0"/>
+    <PartyContactMechPurpose partyId="STAFF_TURING" contactMechId="CM_TURING_PHONE" contactMechPurposeTypeId="PHONE_WORK" fromDate="2024-01-01 00:00:00.0"/>
+
+</entity-engine-xml>
+
