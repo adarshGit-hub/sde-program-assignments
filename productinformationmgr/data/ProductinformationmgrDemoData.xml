@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entity-engine-xml>
+    <!-- ======================================================== -->
+    <!-- 8. Taxonomy / Category Setup (Adjacency List Pattern)    -->
+    <!-- ======================================================== -->
+    <!-- Define the Category Hierarchy (Electronics -> Laptops / Smartphones / Promos) -->
+    <ProductCategory productCategoryId="CAT_ELECTRONICS" productCategoryTypeId="TECH_CATEGORY" categoryName="Electronics" description="All consumer and professional electronics"/>
+    <ProductCategory productCategoryId="CAT_SMARTPHONES" productCategoryTypeId="TECH_CATEGORY" categoryName="Smartphones" description="Smart mobile devices and phones"/>
+    <ProductCategory productCategoryId="CAT_LAPTOPS" productCategoryTypeId="TECH_CATEGORY" categoryName="Laptops" description="Notebooks, ultrabooks and portable workstations"/>
+    <ProductCategory productCategoryId="CAT_PROMO" productCategoryTypeId="TECH_CATEGORY" categoryName="Promotional Packages" description="Promotional bundles and combo offers"/>
+
+    <!-- Hierarchy Rollup mapping parent to child (Taxonomy Adjacency List) -->
+    <ProductCategoryRollup productCategoryId="CAT_SMARTPHONES" parentProductCategoryId="CAT_ELECTRONICS" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryRollup productCategoryId="CAT_LAPTOPS" parentProductCategoryId="CAT_ELECTRONICS" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryRollup productCategoryId="CAT_PROMO" parentProductCategoryId="CAT_ELECTRONICS" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- ======================================================== -->
+    <!-- 1. Product Definitions & Virtual/Variant Setup           -->
+    <!-- ======================================================== -->
+    <!-- Virtual Smartphone Product -->
+    <Product productId="PROD10000" productTypeId="ELECTRONIC_GOOD" primaryProductCategoryId="CAT_SMARTPHONES" 
+             internalName="Virtual Smartphone" productName="Smartphone (Base Model)" description="High-performance flagship smartphone" 
+             isVirtual="Y" isVariant="N" createdDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Variant Smartphone: 128GB Black -->
+    <Product productId="PROD10001" productTypeId="ELECTRONIC_GOOD" primaryProductCategoryId="CAT_SMARTPHONES" 
+             internalName="Smartphone 128GB Black" productName="Smartphone 128GB Black" description="Flagship smartphone in Black with 128GB storage" 
+             isVirtual="N" isVariant="Y" createdDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Variant Smartphone: 256GB Silver -->
+    <Product productId="PROD10002" productTypeId="ELECTRONIC_GOOD" primaryProductCategoryId="CAT_SMARTPHONES" 
+             internalName="Smartphone 256GB Silver" productName="Smartphone 256GB Silver" description="Flagship smartphone in Silver with 256GB storage" 
+             isVirtual="N" isVariant="Y" createdDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Virtual Laptop Product -->
+    <Product productId="PROD20000" productTypeId="ELECTRONIC_GOOD" primaryProductCategoryId="CAT_LAPTOPS" 
+             internalName="Virtual Laptop" productName="Laptop (Base Model)" description="Ultra-thin aluminum body laptop" 
+             isVirtual="Y" isVariant="N" createdDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Variant Laptop: Black -->
+    <Product productId="PROD20001" productTypeId="ELECTRONIC_GOOD" primaryProductCategoryId="CAT_LAPTOPS" 
+             internalName="Laptop Black" productName="Laptop - Midnight Black" description="Ultra-thin laptop in Midnight Black color" 
+             isVirtual="N" isVariant="Y" createdDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Promotional Combo Package (Finished Good Combo) -->
+    <Product productId="PROM001" productTypeId="FINISHED_GOOD" primaryProductCategoryId="CAT_PROMO" 
+             internalName="Laptop-Phone-Promotional-Package" productName="Ultimate Tech Bundle (Laptop + Phone)" description="Promotional package including Laptop Black and Smartphone 128GB Black" 
+             isVirtual="N" isVariant="N" createdDate="2026-01-01 00:00:00.0"/>
+
+
+    <!-- ======================================================== -->
+    <!-- 3. Category Associations                                 -->
+    <!-- ======================================================== -->
+    <!-- Associate products with their respective categories -->
+    <ProductCategoryMember productId="PROD10000" productCategoryId="CAT_SMARTPHONES" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryMember productId="PROD10001" productCategoryId="CAT_SMARTPHONES" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryMember productId="PROD10002" productCategoryId="CAT_SMARTPHONES" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryMember productId="PROD20000" productCategoryId="CAT_LAPTOPS" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryMember productId="PROD20001" productCategoryId="CAT_LAPTOPS" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryMember productId="PROM001" productCategoryId="CAT_PROMO" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductCategoryMember productId="PROM001" productCategoryId="CAT_ELECTRONICS" fromDate="2026-01-01 00:00:00.0"/>
+
+
+    <!-- ======================================================== -->
+    <!-- 4. Product Identification (Non-Mutually Exclusive Sets)  -->
+    <!-- ======================================================== -->
+    <!-- A single physical variant product can have both SKU and UPC codes at the same time -->
+    
+    <!-- Smartphone 128GB Black Identifiers -->
+    <GoodIdentification productId="PROD10001" goodIdentificationTypeId="SKU" idValue="SMARTPHONE-128-BLK"/>
+    <GoodIdentification productId="PROD10001" goodIdentificationTypeId="UPCA" idValue="012345678912"/>
+
+    <!-- Smartphone 256GB Silver Identifiers -->
+    <GoodIdentification productId="PROD10002" goodIdentificationTypeId="SKU" idValue="SMARTPHONE-256-SLV"/>
+    <GoodIdentification productId="PROD10002" goodIdentificationTypeId="UPCA" idValue="012345678929"/>
+
+    <!-- Laptop Midnight Black Identifiers -->
+    <GoodIdentification productId="PROD20001" goodIdentificationTypeId="SKU" idValue="LAPTOP-MIDNIGHT-BLK"/>
+    <GoodIdentification productId="PROD20001" goodIdentificationTypeId="UPCA" idValue="098765432101"/>
+
+
+    <!-- ======================================================== -->
+    <!-- 5. Product Features & Associations                      -->
+    <!-- ======================================================== -->
+    <!-- Feature Categories -->
+    <ProductFeatureCategory productFeatureCategoryId="FCAT_COLOR" description="Color Variants"/>
+    <ProductFeatureCategory productFeatureCategoryId="FCAT_MEMORY" description="Memory Specifications"/>
+
+    <!-- Feature Instances -->
+    <ProductFeature productFeatureId="FEAT_CLR_BLACK" productFeatureTypeId="TECH_CLR" productFeatureCategoryId="FCAT_COLOR" description="Midnight Black"/>
+    <ProductFeature productFeatureId="FEAT_CLR_SILVER" productFeatureTypeId="TECH_CLR" productFeatureCategoryId="FCAT_COLOR" description="Sterling Silver"/>
+    <ProductFeature productFeatureId="FEAT_MEM_128G" productFeatureTypeId="TECH_MEM" productFeatureCategoryId="FCAT_MEMORY" description="128 GB"/>
+    <ProductFeature productFeatureId="FEAT_MEM_256G" productFeatureTypeId="TECH_MEM" productFeatureCategoryId="FCAT_MEMORY" description="256 GB"/>
+
+    <!-- Applying Features to Virtual Smartphone (Selectable Features for customer choice) -->
+    <ProductFeatureAppl productId="PROD10000" productFeatureId="FEAT_CLR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductFeatureAppl productId="PROD10000" productFeatureId="FEAT_CLR_SILVER" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductFeatureAppl productId="PROD10000" productFeatureId="FEAT_MEM_128G" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductFeatureAppl productId="PROD10000" productFeatureId="FEAT_MEM_256G" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Applying Features to Variant Smartphone 128GB Black (Standard distinguishing features) -->
+    <ProductFeatureAppl productId="PROD10001" productFeatureId="FEAT_CLR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductFeatureAppl productId="PROD10001" productFeatureId="FEAT_MEM_128G" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Applying Features to Variant Smartphone 256GB Silver (Standard distinguishing features) -->
+    <ProductFeatureAppl productId="PROD10002" productFeatureId="FEAT_CLR_SILVER" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductFeatureAppl productId="PROD10002" productFeatureId="FEAT_MEM_256G" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Applying Features to Virtual Laptop -->
+    <ProductFeatureAppl productId="PROD20000" productFeatureId="FEAT_CLR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Applying Features to Variant Laptop Black -->
+    <ProductFeatureAppl productId="PROD20001" productFeatureId="FEAT_CLR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2026-01-01 00:00:00.0"/>
+
+
+    <!-- ======================================================== -->
+    <!-- 6. Product Pricing                                       -->
+    <!-- ======================================================== -->
+    <!-- Note: Standard OFBiz ProductPrice primary key fields: 
+         productId, productPriceTypeId, productPricePurposeId, currencyUomId, productStoreGroupId, fromDate -->
+
+    <!-- Smartphone 128GB Black Pricing -->
+    <ProductPrice productId="PROD10001" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="799.99"/>
+    <ProductPrice productId="PROD10001" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="749.99"/>
+
+    <!-- Smartphone 256GB Silver Pricing -->
+    <ProductPrice productId="PROD10002" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="1099.99"/>
+    <ProductPrice productId="PROD10002" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="999.99"/>
+
+    <!-- Laptop Midnight Black Pricing -->
+    <ProductPrice productId="PROD20001" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="1299.99"/>
+    <ProductPrice productId="PROD20001" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="1199.99"/>
+
+    <!-- Promotional Bundle Pricing (Shows discounted price for package) -->
+    <ProductPrice productId="PROM001" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="1999.99"/>
+    <ProductPrice productId="PROM001" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" 
+                  currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2026-01-01 00:00:00.0" price="1799.99"/>
+
+
+    <!-- ======================================================== -->
+    <!-- 7. Product Associations (Virtual/Variant & Combo)        -->
+    <!-- ======================================================== -->
+    
+    <!-- Virtual-to-Variant Associations for Smartphones -->
+    <ProductAssoc productId="PROD10000" productIdTo="PROD10001" productAssocTypeId="PRODUCT_VARIANT" fromDate="2026-01-01 00:00:00.0"/>
+    <ProductAssoc productId="PROD10000" productIdTo="PROD10002" productAssocTypeId="PRODUCT_VARIANT" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Virtual-to-Variant Associations for Laptop -->
+    <ProductAssoc productId="PROD20000" productIdTo="PROD20001" productAssocTypeId="PRODUCT_VARIANT" fromDate="2026-01-01 00:00:00.0"/>
+
+    <!-- Marketing Package Bundle Associations (Links Promo Package to component items) -->
+    <ProductAssoc productId="PROM001" productIdTo="PROD10001" productAssocTypeId="PRODUCT_COMPONENT" fromDate="2026-01-01 00:00:00.0" quantity="1.0"/>
+    <ProductAssoc productId="PROM001" productIdTo="PROD20001" productAssocTypeId="PRODUCT_COMPONENT" fromDate="2026-01-01 00:00:00.0" quantity="1.0"/>
+
+</entity-engine-xml>
