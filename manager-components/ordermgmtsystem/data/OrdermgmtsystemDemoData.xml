@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entity-engine-xml>
+    <Party partyId="PER123" partyTypeId="PERSON" statusId="PARTY_ENABLED" />
+    <Person partyId="PER123" firstName="John" lastName="Doe" />
+    <PartyRole partyId="PER123" roleTypeId="CUSTOMER" />
+    <PartyRole partyId="PER123" roleTypeId="BILL_TO_CUSTOMER" />
+    <Party partyId="VEN456" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />
+    <PartyGroup partyId="VEN456" groupName="ABC Vendor" />
+    <PartyRole partyId="VEN456" roleTypeId="VENDOR" />
+    <PartyRole partyId="VEN456" roleTypeId="BILL_FROM_VENDOR" />
+    <ContactMech contactMechId="10000" contactMechTypeId="TELECOM_NUMBER" />
+    <TelecomNumber contactMechId="10000" contactNumber="555-1234" />
+    <ContactMech contactMechId="10002" contactMechTypeId="POSTAL_ADDRESS" />
+    <PostalAddress contactMechId="10002" address1="123 Vendor St" city="VendorCity" postalCode="12345" />
+    <ContactMech contactMechId="10003" contactMechTypeId="POSTAL_ADDRESS" />
+    <PostalAddress contactMechId="10003" address1="456 Customer Ave" city="CustomerCity" postalCode="67890" />
+    <Product productId="PROD20001" productTypeId="FINISHED_GOOD" internalName="New Laptop" />
+    <Product productId="PROD10002" productTypeId="FINISHED_GOOD" internalName="Another Product" />
+    <Product productId="SALES_TAX" productTypeId="SERVICE" internalName="Sales Tax" />
+    <OrderHeader orderId="ORD789" orderTypeId="SALES_ORDER" statusId="ORDER_APPROVED" orderDate="2024-09-19 00:00:00.000" currencyUom="USD" />
+    <OrderRole orderId="ORD789" partyId="PER123" roleTypeId="BILL_TO_CUSTOMER" />
+    <OrderItemShipGroup orderId="ORD789" shipGroupSeqId="00001" contactMechId="10003" />
+    <OrderItemShipGroup orderId="ORD789" shipGroupSeqId="00002" contactMechId="10003" />
+    <OrderItem orderId="ORD789" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="PROD20001" quantity="1" unitPrice="1299.99" statusId="ITEM_APPROVED" />
+    <OrderItemShipGroupAssoc orderId="ORD789" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="1" />
+    <OrderItem orderId="ORD789" orderItemSeqId="00003" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="SALES_TAX" quantity="1" unitPrice="65.0" statusId="ITEM_APPROVED" />
+    <OrderItemShipGroupAssoc orderId="ORD789" orderItemSeqId="00003" shipGroupSeqId="00001" quantity="1" />
+    <OrderItem orderId="ORD789" orderItemSeqId="00002" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="PROD10002" quantity="1" unitPrice="1099.99" statusId="ITEM_CREATED" />
+    <OrderItemShipGroupAssoc orderId="ORD789" orderItemSeqId="00002" shipGroupSeqId="00002" quantity="1" />
+    <OrderItem orderId="ORD789" orderItemSeqId="00004" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="SALES_TAX" quantity="1" unitPrice="55.0" statusId="ITEM_CREATED" />
+    <OrderItemShipGroupAssoc orderId="ORD789" orderItemSeqId="00004" shipGroupSeqId="00002" quantity="1" />
+    <OrderContactMech orderId="ORD789" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="10003" />
+    <OrderStatus orderStatusId="OS_789_1" statusId="ORDER_APPROVED" orderId="ORD789" statusDatetime="2024-09-19 00:00:00.000" />
+    <OrderAdjustment orderAdjustmentId="OA_789_1" orderAdjustmentTypeId="SALES_TAX" orderId="ORD789" amount="120.0" />
+    <OrderPaymentPreference orderPaymentPreferenceId="OPP_789" orderId="ORD789" paymentMethodTypeId="CREDIT_CARD" maxAmount="2519.98" statusId="PAYMENT_AUTHORIZED" />
+    <OrderHeader orderId="ORD123" orderTypeId="PURCHASE_ORDER" statusId="ORDER_CREATED" orderDate="2024-09-19 00:00:00.000" currencyUom="USD" />
+    <OrderRole orderId="ORD123" partyId="VEN456" roleTypeId="BILL_FROM_VENDOR" />
+    <OrderItemShipGroup orderId="ORD123" shipGroupSeqId="00001" vendorPartyId="VEN456" contactMechId="10002" telecomContactMechId="10000" />
+    <OrderItem orderId="ORD123" orderItemSeqId="00001" orderItemTypeId="PRODUCT_ORDER_ITEM" productId="PROD20001" quantity="50" unitPrice="1299.99" statusId="ITEM_CREATED" />
+    <OrderItemShipGroupAssoc orderId="ORD123" orderItemSeqId="00001" shipGroupSeqId="00001" quantity="50" />
+    <OrderContactMech orderId="ORD123" contactMechPurposeTypeId="SHIPPING_LOCATION" contactMechId="10002" />
+    <OrderStatus orderStatusId="OS_123_1" statusId="ORDER_CREATED" orderId="ORD123" statusDatetime="2024-09-19 00:00:00.000" />
+    <OrderAdjustment orderAdjustmentId="OA_123_1" orderAdjustmentTypeId="FEE" orderId="ORD123" amount="0.0" />
+    <OrderPaymentPreference orderPaymentPreferenceId="OPP_123" orderId="ORD123" paymentMethodTypeId="EFT_ACCOUNT" maxAmount="64999.5" statusId="PAYMENT_NOT_RECEIVED" />
+</entity-engine-xml>

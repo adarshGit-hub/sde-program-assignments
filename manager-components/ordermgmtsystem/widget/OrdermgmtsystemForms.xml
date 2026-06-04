@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+    <form name="ListOrders" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderHeader" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderHeader"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderHeader" default-field-type="display"/>
+    </form>
+
+    <form name="ListOrderParts" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderItemShipGroup" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderItemShipGroup"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderItemShipGroup" default-field-type="display"/>
+    </form>
+
+    <form name="ListOrderItems" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderItem" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderItem"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderItem" default-field-type="display"/>
+    </form>
+
+    <form name="ListOrderContactMechs" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderContactMech" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderContactMech"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderContactMech" default-field-type="display"/>
+    </form>
+
+    <form name="ListOrderStatuses" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderStatus" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderStatus"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderStatus" default-field-type="display"/>
+    </form>
+
+    <form name="ListOrderAdjustments" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderAdjustment" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderAdjustment"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderAdjustment" default-field-type="display"/>
+    </form>
+
+    <form name="ListOrderPayments" type="list" list-name="listIt" paginate-target="main" default-entity-name="OrderPaymentPreference" separate-columns="true" odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="OrderPaymentPreference"/>
+        </actions>
+        <auto-fields-entity entity-name="OrderPaymentPreference" default-field-type="display"/>
+    </form>
+
+</forms>
