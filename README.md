@@ -1,6 +1,6 @@
 # SDE Program Assignments
 
-This repository contains various assignments and projects completed as part of the SDE (Software Development Engineer) program, with a primary focus on Apache OFBiz, order management systems, and related integrations (e.g., HotWax Commerce, Shopify, NetSuite).
+This repository contains assignment solutions to the [SaaS Tech Academy SDE Program](https://github.com/saastechacademy/foundation/blob/main/sde-program.md). The projects and assignments are completed as part of the SDE (Software Development Engineer) program, with a primary focus on Apache OFBiz, order management systems, and related integrations (e.g., HotWax Commerce, Shopify, NetSuite).
 
 ## Repository Structure
 
@@ -18,9 +18,4 @@ Reports and documentation for assignments:
 - **[`OFBiz_Order_Fulfillment_Report.pdf`](./activity-assignments/OFBiz_Order_Fulfillment_Report.pdf)**: A detailed report on order fulfillment processes in Apache OFBiz.
 - **[`company-store-product-catalog-assignment.pdf`](./activity-assignments/company-store-product-catalog-assignment.pdf)**: An assignment focused on creating and managing a product catalog for a company store.
 
-## Technologies Used
-- Apache OFBiz
-- SQL / Relational Databases
-- Groovy / Java (OFBiz backend)
-- XML (OFBiz definitions)
-- Markdown / AsciiDoc
+
