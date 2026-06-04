@@ -10,6 +10,7 @@ Contains SQL query exercises related to an Order Management System (OMS) databas
 
 ### 2. [Manager Components](./manager-components)
 Custom components built for Apache OFBiz:
+- **[`ordermgmtsystem/`](./manager-components/ordermgmtsystem)**: A component designed for Order Management System functionalities.
 - **[`productinformationmgr/`](./manager-components/productinformationmgr)**: A component designed for Product Information Management (PIM). Contains standard OFBiz component directories (`entitydef`, `servicedef`, `webapp`, `widget`, etc.).
 - **[`relationshipmgr/`](./manager-components/relationshipmgr)**: A component designed for managing business relationships, customer data, or CRM functionalities.
 
