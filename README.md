@@ -6,7 +6,9 @@ This repository contains assignment solutions to the [SaaS Tech Academy SDE Prog
 
 ### 1. [SQL Assignments](./SQL)
 Contains SQL query exercises related to an Order Management System (OMS) database schema (e.g., OFBiz). 
-- **[`sql-assignments-1.md`](./SQL/sql-assignments-1.md)**: Covers business scenarios such as customer acquisition, product management (including NetSuite/Shopify/HotWax IDs), order fulfillment reporting, sales and revenue analysis (BOPIS), and payment reconciliation.
+- **[`sql-assignment-1.md`](./SQL/sql-assignment-1.md)**: Covers business scenarios such as customer acquisition, product management (including NetSuite/Shopify/HotWax IDs), order fulfillment reporting, sales and revenue analysis (BOPIS), and payment reconciliation.
+- **[`sql-assignment-2.md`](./SQL/sql-assignment-2.md)**: Covers business scenarios such as region-specific order analysis (e.g., New York), facility-wise revenue, inventory tracking (lost/damaged, low stock), and sales channel performance.
+- **[`sql-assignment-3.md`](./SQL/sql-assignment-3.md)**: Covers business scenarios such as return and appeasement analysis, logistics tracking (transfer orders, one-day shipping, missing picklists), and detailed inventory-facility relationships.
 
 ### 2. [Manager Components](./manager-components)
 Custom components built for Apache OFBiz:
