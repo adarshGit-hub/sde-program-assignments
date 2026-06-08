@@ -178,3 +178,103 @@ from inventory_item ii
 join inventory_item_variance iiv on ii.INVENTORY_ITEM_ID = iiv.INVENTORY_ITEM_ID and iiv.reason_enum_id in ("VAR_DAMAGED", "VAR_STOLEN", "VAR_LOST")
 group by ii.inventory_item_id , iiv.reason_enum_id
 ```
+---
+
+### 8.2 Low Stock or Out of Stock Items Report
+
+**Business Problem:**
+> Avoiding out-of-stock situations is critical. This report flags items that have fallen below a certain reorder threshold or have zero available stock.
+
+**Fields to Retrieve:**
+- `PRODUCT_ID`
+- `PRODUCT_NAME`
+- `FACILITY_ID`
+- `QOH (Quantity on Hand)`
+- `ATP (Available to Promise)`
+- `REORDER_THRESHOLD`
+- `DATE_CHECKED`
+
+```sql
+select 
+ii.PRODUCT_ID,
+p.PRODUCT_NAME,
+ii.FACILITY_ID,
+ii.Quantity_On_Hand_Total as QOH,
+ii.Available_To_Promise_Total as ATP,
+pf.Minimum_Stock as REORDER_THRESHOLD,
+CURDATE() as DATE_CHECKED
+from inventory_item ii 
+join product p on p.product_id = ii.product_id
+left join product_facility pf on pf.product_id = ii.product_id and pf.facility_id = ii.facility_id
+where pf.minimum_stock > ii.Available_To_Promise_Total
+```
+---
+
+### 8.3 Retrieve the Current Facility (Physical or Virtual) of Open Orders
+
+**Business Problem:**
+> The business wants to know where open orders are currently assigned, whether in a physical store or a virtual facility (e.g., a distribution center or online fulfillment location).
+
+**Fields to Retrieve:**
+- `ORDER_ID`
+- `ORDER_STATUS`
+- `FACILITY_ID`
+- `FACILITY_NAME`
+- `FACILITY_TYPE_ID`
+
+```sql
+select 
+oh.ORDER_ID,
+oh.STATUS_id,
+oisg.FACILITY_ID,
+f.FACILITY_NAME,
+f.FACILITY_TYPE_ID
+from order_header oh
+join order_item_ship_group oisg on oisg.order_id = oh.order_id and( oh.status_id not in  ('ORDER_COMPLETED', 'ORDER_CANCELLED'))
+join facility f on f.facility_id = oisg.facility_id;
+```
+---
+
+### 8.4 Items Where QOH and ATP Differ
+
+**Business Problem:**
+> Sometimes the Quantity on Hand (QOH) doesn’t match the Available to Promise (ATP) due to pending orders, reservations, or data discrepancies. This needs review for accurate fulfillment planning.
+
+**Fields to Retrieve:**
+- `PRODUCT_ID`
+- `FACILITY_ID`
+- `QOH (Quantity on Hand)`
+- `ATP (Available to Promise)`
+- `DIFFERENCE (QOH - ATP)`
+
+```sql
+select
+ii.product_id,
+ii.facility_id,
+ii.Quantity_On_Hand_Total as QOH,	
+ii.Available_To_Promise_Total as ATP,
+(ii.Quantity_On_Hand_Total - ii.Available_To_Promise_Total) as DIFF
+from inventory_item ii 
+```
+---
+
+### 8.6 Total Orders by Sales Channel
+
+**Business Problem:**
+> Marketing and sales teams want to see how many orders come from each channel (e.g., web, mobile app, in-store POS, marketplace) to allocate resources effectively.
+
+**Fields to Retrieve:**
+- `SALES_CHANNEL`
+- `TOTAL_ORDERS`
+- `TOTAL_REVENUE`
+- `REPORTING_PERIOD`
+
+```sql
+select 
+oh.Sales_Channel_Enum_Id as SALES_CHANNEL,
+count(*) as TOTAL_ORDERS,
+oh.grand_total as TOTAL_REVENUE, 
+CURDATE() as REPORTING_PERIOD
+from order_header oh
+group by oh.Sales_Channel_Enum_Id
+```
