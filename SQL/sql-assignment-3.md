@@ -65,7 +65,7 @@ oh.PRODUCT_STORE_ID,
 rs.STATUS_DATETIME,
 oh.ORDER_NAME,
 rh.FROM_PARTY_ID,
-rs.RETURN_DATE,
+rh.RETURN_DATE,
 rh.ENTRY_DATE,
 rh.RETURN_CHANNEL_ENUM_ID
 from return_header rh 
@@ -183,11 +183,11 @@ select
 ri.ORDER_ID,
 rh.RETURN_ID,
 rh.RETURN_DATE,
-ri.RETURN_REASON_id,
+ri.RETURN_REASON_id AS RETURN_REASON,
 sum(ri.return_quantity) as RETURN_QUANTITY
 from return_header rh 
 join return_item ri on ri.return_id = rh.return_id
-group by ri.order_id
+group by ri.order_id, rh.return_id, rh.return_date, ri.return_reason_id
 having RETURN_QUANTITY > 1
 ```
 ---
@@ -205,14 +205,14 @@ having RETURN_QUANTITY > 1
 
 ```sql
 select
-s.origin_FACILITY_ID,
+s.origin_FACILITY_ID AS FACILITY_ID,
 f.FACILITY_NAME,
-count(distinct s.primary_order_id) as TOTAL_ONE_DAY_SHIP_ORDERS
--- REPORTING_PERIOD
+count(distinct s.primary_order_id) as TOTAL_ONE_DAY_SHIP_ORDERS,
+CURDATE() as REPORTING_PERIOD
 from shipment s 
 join facility f on f.facility_id = s.origin_FACILITY_ID
 join shipment_route_segment srs on s.shipment_id = srs.shipment_id and srs.shipment_method_type_id = "NEXT_DAY"
-group by f.facility_id
+group by s.origin_FACILITY_ID, f.FACILITY_NAME
 ```
 ---
 
@@ -231,9 +231,10 @@ group by f.facility_id
 ```sql
 select 
 fp.PARTY_ID,
-p.first_name as NAME,
+p.first_name,
+p.last_name,
 fp.ROLE_TYPE_ID,
-fp.FACILITY_ID ,
+fp.FACILITY_ID,
 case when fp.thru_date < curDate() then "Inactive" else "Active" end as STATUS
 from facility_party fp
 join person p on p.party_id = fp.party_id and fp.role_type_id = "WAREHOUSE_PICKER"
@@ -255,13 +256,12 @@ join person p on p.party_id = fp.party_id and fp.role_type_id = "WAREHOUSE_PICKE
 select
 pf.PRODUCT_ID,
 p.PRODUCT_NAME,
--- count(pf.facility_id) as FACILITY_COUNT -- only number of facility needed case1 
-pf.facility_id, -- details case 2 
+COUNT(pf.facility_id) OVER(PARTITION BY pf.product_id) as FACILITY_COUNT,
+pf.facility_id,
 f.Facility_Type_Id
 from product_facility pf 
 join product p on pf.product_id = p.product_id
-join facility f on f.facility_id = pf.facility_id  -- details case2 
--- GROUP by pf.product_id -- only number of facility needed case1
+join facility f on f.facility_id = pf.facility_id
 ```
 ---
 
@@ -306,14 +306,14 @@ join facility f on f.facility_id = ii.facility_id
 
 ```sql
 select 
-oh.ORDER_ID,
-s.origin_FACILITY_ID,
-s.destination_FACILITY_ID,
+oh.ORDER_ID AS TRANSFER_ORDER_ID,
+s.origin_FACILITY_ID AS FROM_FACILITY_ID,
+s.destination_FACILITY_ID AS TO_FACILITY_ID,
 oi.PRODUCT_ID,
-oi.QUANTITY,
+oi.QUANTITY AS REQUESTED_QUANTITY,
 oisgir.quantity as RESERVED_QUANTITY,
 s.Estimated_Ship_Date as TRANSFER_DATE,
-oh.STATUS_id
+oh.STATUS_id AS STATUS
 from order_header oh 
 join order_item oi on oi.order_id = oh.order_id
 left join order_item_ship_grp_inv_res oisgir on oisgir.order_id = oi.order_id and oisgir.order_item_seq_id = oi.order_item_seq_id
@@ -338,12 +338,12 @@ where
 
 ```sql
 select 
-s.primary_ORDER_ID,
+s.primary_ORDER_ID AS ORDER_ID,
 oh.Order_Date as ORDER_DATE,
 oh.status_id as ORDER_STATUS,
-s.origin_FACILITY_ID,
-ps.picklist_id
--- DURATION
+s.origin_FACILITY_ID AS FACILITY_ID,
+ps.picklist_id,
+TIMESTAMPDIFF(HOUR, oh.Order_Date, NOW()) AS DURATION
 from shipment s
 join order_header oh on oh.order_id = s.primary_order_id
 left join picklist_shipment ps on ps.shipment_id = s.shipment_id 

@@ -11,13 +11,15 @@
 
 ```sql
 SELECT
+  p.PARTY_ID AS CUSTOMER_ID,
   p.FIRST_NAME,
   p.LAST_NAME,
   (SELECT cm.INFO_STRING FROM contact_mech cm 
    JOIN party_contact_mech pcm ON p.PARTY_ID = pcm.PARTY_ID AND cm.CONTACT_MECH_TYPE_ID = 'EMAIL_ADDRESS' LIMIT 1) AS EMAIL_ADDRESS,
   (SELECT tn.CONTACT_NUMBER FROM contact_mech cm 
    JOIN party_contact_mech pcm ON p.PARTY_ID = pcm.PARTY_ID AND cm.CONTACT_MECH_TYPE_ID = 'TELECOM_NUMBER'
-   JOIN telecom_number tn ON tn.CONTACT_MECH_ID = pcm.CONTACT_MECH_ID LIMIT 1) AS CONTACT_NUMBER
+   JOIN telecom_number tn ON tn.CONTACT_MECH_ID = pcm.CONTACT_MECH_ID LIMIT 1) AS CONTACT_NUMBER,
+  p.CREATED_STAMP AS SIGNUP_DATE
 FROM 
   person p
 JOIN party_role pr ON pr.PARTY_ID = p.PARTY_ID 
@@ -37,7 +39,8 @@ JOIN party_role pr ON pr.PARTY_ID = p.PARTY_ID
 SELECT 
   p.PRODUCT_ID, 
   p.PRODUCT_TYPE_ID, 
-  p.INTERNAL_NAME 
+  p.INTERNAL_NAME,
+  p.STATUS_ID AS STATUS
 FROM 
   product p
 WHERE 
@@ -56,7 +59,7 @@ SELECT
   p.PRODUCT_ID, 
   p.INTERNAL_NAME, 
   p.PRODUCT_TYPE_ID, 
-  gi.ID_VALUE  
+  gi.ID_VALUE AS NETSUITE_ID
 FROM 
   product p
 LEFT JOIN good_identification gi 
@@ -77,7 +80,8 @@ WHERE
 SELECT 
   p.PRODUCT_ID AS PRODUCT_ID, 
   ssp.SHOPIFY_PRODUCT_ID AS SHOPIFY_ID, 
-  p.PRODUCT_NAME AS HOTWAX_ID, 
+  p.PRODUCT_ID AS HOTWAX_ID, 
+  p.PRODUCT_NAME AS PRODUCT_NAME,
   gi.ID_VALUE AS ERP_ID
 FROM 
   product p 
@@ -161,13 +165,14 @@ FROM
 
 ```sql
 SELECT 
-  oh.order_id, 
-  oh.status_id, 
-  opp.status_id,
+  oh.order_id AS ORDER_ID, 
+  oh.status_id AS ORDER_STATUS, 
+  opp.status_id AS PAYMENT_STATUS,
+  opp.max_amount AS PAYMENT_AMOUNT,
   (SELECT s.status_id 
    FROM shipment s 
    WHERE s.primary_order_id = oh.order_id 
-   LIMIT 1)
+   LIMIT 1) AS SHIPMENT_STATUS
 FROM 
   order_header oh
 JOIN order_payment_preference opp 
@@ -204,8 +209,8 @@ GROUP BY
 
 ```sql
 SELECT 
-  COUNT(*), 
-  SUM(oh.GRAND_TOTAL) 
+  COUNT(*) AS TOTAL_ORDERS, 
+  SUM(oh.GRAND_TOTAL) AS TOTAL_REVENUE
 FROM 
   order_header oh 
 JOIN shipment s 
@@ -225,10 +230,13 @@ JOIN shipment s
 
 ```sql
 SELECT 
-  COUNT(*) 
+  os.CHANGE_REASON,
+  COUNT(*) AS TOTAL_CANCELLED
 FROM 
   order_status os 
 WHERE 
   os.STATUS_ID = 'ORDER_CANCELLED' 
-  AND os.CHANGE_REASON IS NOT NULL;
+  AND os.CHANGE_REASON IS NOT NULL
+GROUP BY
+  os.CHANGE_REASON;
 ```

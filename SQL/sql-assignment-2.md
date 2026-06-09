@@ -22,14 +22,15 @@
 ```sql
 SELECT 
     oh.order_id, 
-    or_role.party_id, pa.address1,
+    or_role.party_id, 
     p.first_name,
-    pa.address1,
+    p.last_name,
+    pa.address1 AS STREET_ADDRESS,
     pa.city,
+    pa.state_province_geo_id AS STATE_PROVINCE,
     pa.postal_code,
-    pa.country_geo_id,
-    pa.state_province_geo_id,
-    oh.status_id,
+    pa.country_geo_id AS COUNTRY_CODE,
+    oh.status_id AS ORDER_STATUS,
     oh.order_date
 FROM order_header oh 
 join order_status os on oh.ORDER_ID = os.ORDER_ID and (os.STATUS_ID = 'ORDER_CREATED' or
@@ -68,12 +69,13 @@ LEFT JOIN postal_address pa
 SELECT 
     oh.order_id, 
     p.first_name,
-    pa.address1,
+    p.last_name,
+    pa.address1 AS STREET_ADDRESS,
     pa.city,
-    pa.state_province_geo_id,
+    pa.state_province_geo_id AS STATE_PROVINCE,
     pa.postal_code,
-    oh.grand_total,
-    oh.status_id,
+    oh.grand_total AS TOTAL_AMOUNT,
+    oh.status_id AS ORDER_STATUS,
     oh.order_date
 FROM order_header oh 
 JOIN order_contact_mech ocm 
@@ -107,7 +109,9 @@ LEFT JOIN postal_address pa
 select oi.product_id, 
 p.internal_name,
 count(*) as TOTAL_QUANTITY_SOLD,
-pa.city
+pa.city,
+pa.state_province_geo_id AS STATE,
+sum(oi.unit_price * oi.quantity) AS REVENUE
 from order_item oi 
 join product p on oi.product_id = p.product_id
 JOIN order_contact_mech ocm 
@@ -119,7 +123,8 @@ JOIN postal_address pa
     and pa.STATE_PROVINCE_GEO_ID = 'NY'
 group by oi.product_id,
 p.internal_name, 
-    pa.city 
+    pa.city,
+    pa.state_province_geo_id
 order by TOTAL_QUANTITY_SOLD desc;
 ```
 ---
@@ -140,8 +145,10 @@ order by TOTAL_QUANTITY_SOLD desc;
 select oisg.facility_id, 
 f.facility_name,
 count(oi.order_item_seq_id) as TOTAL_ORDERS,
-sum(oi.unit_price) as TOTAL_REVENUE_PER_FACILITY,
-SUM(SUM(oi.unit_price)) OVER() AS GRAND_TOTAL_REVENUE
+sum(oi.unit_price * oi.quantity) as TOTAL_REVENUE,
+SUM(SUM(oi.unit_price * oi.quantity)) OVER() AS GRAND_TOTAL_REVENUE,
+MIN(oh.order_date) AS START_DATE,
+MAX(oh.order_date) AS END_DATE
 from order_item_ship_group oisg
 join order_item oi on oisg.ship_group_seq_id = oi.ship_group_seq_id 
 and oi.status_id = "ITEM_COMPLETED"
@@ -253,7 +260,7 @@ ii.product_id,
 ii.facility_id,
 ii.Quantity_On_Hand_Total as QOH,	
 ii.Available_To_Promise_Total as ATP,
-(ii.Quantity_On_Hand_Total - ii.Available_To_Promise_Total) as DIFF
+(ii.Quantity_On_Hand_Total - ii.Available_To_Promise_Total) as DIFFERENCE
 from inventory_item ii 
 ```
 ---
@@ -273,7 +280,7 @@ from inventory_item ii
 select 
 oh.Sales_Channel_Enum_Id as SALES_CHANNEL,
 count(*) as TOTAL_ORDERS,
-oh.grand_total as TOTAL_REVENUE, 
+sum(oh.grand_total) as TOTAL_REVENUE, 
 CURDATE() as REPORTING_PERIOD
 from order_header oh
 group by oh.Sales_Channel_Enum_Id
