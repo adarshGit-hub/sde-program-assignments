@@ -240,3 +240,7 @@ WHERE
 GROUP BY
   os.CHANGE_REASON;
 ```
+### 11. Product Threshold Value
+```sql
+SELECT product_id, minimum_stock as threshold FROM product_facility;
+```
