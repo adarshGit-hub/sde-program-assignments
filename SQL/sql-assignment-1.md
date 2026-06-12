@@ -36,6 +36,10 @@ JOIN party_role pr ON pr.PARTY_ID = p.PARTY_ID
 > Merchandising teams often need a list of all physical products to manage logistics, warehousing, and shipping.
 
 ```sql
+select p.PRODUCT_ID, p.PRODUCT_TYPE_ID, p.INTERNAL_NAME from product p
+join 
+product_type pt on p.PRODUCT_TYPE_ID = pt.PRODUCT_TYPE_ID and pt.IS_PHYSICAL = 'Y';
+
 SELECT 
   p.PRODUCT_ID, 
   p.PRODUCT_TYPE_ID, 
@@ -66,7 +70,7 @@ LEFT JOIN good_identification gi
   ON p.PRODUCT_ID = gi.PRODUCT_ID 
   AND gi.GOOD_IDENTIFICATION_TYPE_ID = 'ERP_ID' 
 WHERE 
-  gi.GOOD_IDENTIFICATION_TYPE_ID IS NULL;
+  gi.ID_VALUE  is null;
 ```
 
 ---
@@ -171,12 +175,13 @@ SELECT
   opp.max_amount AS PAYMENT_AMOUNT,
   (SELECT s.status_id 
    FROM shipment s 
-   WHERE s.primary_order_id = oh.order_id 
+   WHERE s.primary_order_id = oh.order_id and s.status_id != "SHIPMENT_SHIPPED"
    LIMIT 1) AS SHIPMENT_STATUS
 FROM 
   order_header oh
 JOIN order_payment_preference opp 
-  ON opp.order_id = oh.order_id;
+  ON opp.order_id = oh.order_id AND opp.status_id  IN ("PAYMENT_SETTLED", "PAYMENT_AUTHORIZED")
+WHERE oh.status_id = "ORDER_APPROVED";
 ```
 
 ---
@@ -235,8 +240,10 @@ SELECT
 FROM 
   order_status os 
 WHERE 
-  os.STATUS_ID = 'ORDER_CANCELLED' 
-  AND os.CHANGE_REASON IS NOT NULL
+  os.STATUS_ID = 'ORDER_CANCELLED' and 
+  os.status_datetime <= '2023-12-31 00:00:00' and 
+  os.status_datetime > '2023-11-30 00:00:00' 
+  -- AND os.CHANGE_REASON IS NOT NULL
 GROUP BY
   os.CHANGE_REASON;
 ```
