@@ -1,0 +1,178 @@
+{
+	"info": {
+		"_postman_id": "6f2191a2-46ba-4ef4-a9b7-baed04a1f29a",
+		"name": "PICK_PACK_SHIP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "55688052",
+		"_collection_link": "https://adarsh-raghuwanshi-707fe5f0-6142272.postman.co/workspace/Adarsh-Raghuwanshi's-Workspace~880973c5-e2d6-47f1-8c31-3bde5497748f/collection/55688052-6f2191a2-46ba-4ef4-a9b7-baed04a1f29a?action=share&source=collection_link&creator=55688052"
+	},
+	"item": [
+		{
+			"name": "Pick",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let response = pm.response.json();",
+							"",
+							"if (pm.response.code === 200) {",
+							"    // Notice the [0] added here to grab the first ID from the array",
+							"    pm.environment.set(\"shipmentId\", response.shipmentIds[0]); ",
+							"    ",
+							"    postman.setNextRequest(\"Pack\");",
+							"} else {",
+							"    postman.setNextRequest(null);",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"packageName\": \"A\",\n  \"facilityId\": \"{{facilityId}}\",\n  \"shipmentMethodTypeId\": \"STANDARD\",\n  \"statusId\": \"PICKLIST_ASSIGNED\",\n  \"orderItems\": [\n    {\n      \"orderId\": \"{{orderId}}\",\n      \"orderItemSeqId\": \"00101\",\n      \"shipGroupSeqId\": \"00002\",\n      \"productId\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"pickers\": [\n    {\n      \"partyId\": \"10035\",\n      \"roleTypeId\": \"WAREHOUSE_PICKER\"\n    }\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://nextgen-maarg.hotwax.io/rest/s1/poorti/createOrderFulfillmentWave",
+					"protocol": "https",
+					"host": [
+						"nextgen-maarg",
+						"hotwax",
+						"io"
+					],
+					"path": [
+						"rest",
+						"s1",
+						"poorti",
+						"createOrderFulfillmentWave"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pack",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"shipmentId\": \"{{shipmentId}}\",\n  \"orderId\": \"{{orderId}}\",\n  \"facilityId\": \"{{facilityId}}\",\n  \"rejectedOrderItems\": [],\n  \"shipmentPackageContents\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://nextgen-maarg.hotwax.io/rest/s1/poorti/shipments/{{shipmentId}}/pack",
+					"protocol": "https",
+					"host": [
+						"nextgen-maarg",
+						"hotwax",
+						"io"
+					],
+					"path": [
+						"rest",
+						"s1",
+						"poorti",
+						"shipments",
+						"{{shipmentId}}",
+						"pack"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ship",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"shipmentId\" : \"{{shipmentId}}\"}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://nextgen-maarg.hotwax.io/rest/s1/poorti/shipments/{{shipmentId}}/ship",
+					"protocol": "https",
+					"host": [
+						"nextgen-maarg",
+						"hotwax",
+						"io"
+					],
+					"path": [
+						"rest",
+						"s1",
+						"poorti",
+						"shipments",
+						"{{shipmentId}}",
+						"ship"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
