@@ -21,5 +21,334 @@ under the License.
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
 
+    <!-- ======================================================== -->
+    <!-- PRODUCTS UI FORMS                                        -->
+    <!-- ======================================================== -->
+
+    <!-- Search / Find Product Form -->
+    <form name="FindProducts" type="single" target="FindProduct" default-entity-name="Product">
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="productId" title="Product ID"><text-find/></field>
+        <field name="internalName" title="Internal Name"><text-find/></field>
+        <field name="productTypeId" title="Product Type">
+            <drop-down allow-empty="true">
+                <entity-options key-field-name="productTypeId" entity-name="ProductType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="isVirtual" title="Is Virtual">
+            <drop-down allow-empty="true">
+                <option key="Y" description="Yes"/>
+                <option key="N" description="No"/>
+            </drop-down>
+        </field>
+        <field name="isVariant" title="Is Variant">
+            <drop-down allow-empty="true">
+                <option key="Y" description="Yes"/>
+                <option key="N" description="No"/>
+            </drop-down>
+        </field>
+        <field name="searchButton" title="Search"><submit/></field>
+    </form>
+
+    <!-- Grid to list Products -->
+    <grid name="ListProducts" list-name="listIt" paginate-target="FindProduct" default-entity-name="Product"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="Product"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+            </service>
+        </actions>
+        <field name="productId" title="Product ID" sort-field="true"><display/></field>
+        <field name="productTypeId" title="Type"><display-entity entity-name="ProductType"/></field>
+        <field name="internalName" title="Internal Name" sort-field="true"><display/></field>
+        <field name="productName" title="Name" sort-field="true"><display/></field>
+        <field name="isVirtual" title="Virtual"><display/></field>
+        <field name="isVariant" title="Variant"><display/></field>
+        <field name="primaryProductCategoryId" title="Primary Category"><display-entity entity-name="ProductCategory" key-field-name="productCategoryId" description="${categoryName} [${productCategoryId}]"/></field>
+    </grid>
+
+    <!-- Create Product Form -->
+    <form name="CreateProduct" type="single" target="CreateProduct" title="Create a New Product" default-entity-name="Product">
+        <field name="productId" title="Product ID" required-field="true"><text size="20"/></field>
+        <field name="productTypeId" title="Product Type" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productTypeId" entity-name="ProductType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="primaryProductCategoryId" title="Primary Category">
+            <drop-down allow-empty="true">
+                <entity-options key-field-name="productCategoryId" entity-name="ProductCategory" description="${categoryName} [${productCategoryId}]">
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="internalName" title="Internal Name" required-field="true"><text size="30"/></field>
+        <field name="productName" title="Product Name"><text size="30"/></field>
+        <field name="description" title="Description"><text size="50"/></field>
+        <field name="isVirtual" title="Is Virtual" required-field="true">
+            <drop-down>
+                <option key="N" description="No"/>
+                <option key="Y" description="Yes"/>
+            </drop-down>
+        </field>
+        <field name="isVariant" title="Is Variant" required-field="true">
+            <drop-down>
+                <option key="N" description="No"/>
+                <option key="Y" description="Yes"/>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="Create Product"><submit button-type="button"/></field>
+    </form>
+
+    <!-- Link / Apply Feature to Product -->
+    <form name="ApplyFeatureToProduct" type="single" target="ApplyFeatureToProduct" title="Apply Feature to Product" default-entity-name="ProductFeatureAppl">
+        <field name="productId" title="Product ID" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productId" entity-name="Product" description="${internalName} [${productId}]">
+                    <entity-order-by field-name="internalName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productFeatureId" title="Product Feature" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productFeatureId" entity-name="ProductFeature" description="${description} [${productFeatureId}]">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productFeatureApplTypeId" title="Application Type" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productFeatureApplTypeId" entity-name="ProductFeatureApplType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="From Date" required-field="true"><date-time default-value="${nowTimestamp}"/></field>
+        <field name="submitButton" title="Apply Feature"><submit button-type="button"/></field>
+    </form>
+
+    <!-- Add Product to Category Member Form -->
+    <form name="AddProductToCategory" type="single" target="AddProductToCategory" title="Categorize Product (Add to Category)" default-entity-name="ProductCategoryMember">
+        <field name="productId" title="Product ID" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productId" entity-name="Product" description="${internalName} [${productId}]">
+                    <entity-order-by field-name="internalName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productCategoryId" title="Product Category" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productCategoryId" entity-name="ProductCategory" description="${categoryName} [${productCategoryId}]">
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="From Date" required-field="true"><date-time default-value="${nowTimestamp}"/></field>
+        <field name="submitButton" title="Add to Category"><submit button-type="button"/></field>
+    </form>
+
+    <!-- List Product Category Members (Categorizations) -->
+    <grid name="ListProductCategoryMembers" list-name="categoryMembers" default-entity-name="ProductCategoryMember"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="ProductCategoryMember">
+                <order-by field-name="productCategoryId"/>
+                <order-by field-name="productId"/>
+            </entity-condition>
+        </actions>
+        <field name="productId" title="Product"><display-entity entity-name="Product" description="${internalName} [${productId}]"/></field>
+        <field name="productCategoryId" title="Category"><display-entity entity-name="ProductCategory" description="${categoryName} [${productCategoryId}]"/></field>
+        <field name="fromDate" title="From Date"><display/></field>
+        <field name="deleteLink" title="Remove" widget-style="buttontext">
+            <hyperlink description="Remove" target="RemoveProductFromCategory">
+                <parameter param-name="productId"/>
+                <parameter param-name="productCategoryId"/>
+                <parameter param-name="fromDate"/>
+            </hyperlink>
+        </field>
+    </grid>
+
+    <!-- List applied features of products -->
+    <grid name="ListProductFeaturesApplied" list-name="featuresApplied" default-entity-name="ProductFeatureAppl"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="ProductFeatureAppl">
+                <order-by field-name="productId"/>
+                <order-by field-name="productFeatureId"/>
+            </entity-condition>
+        </actions>
+        <field name="productId" title="Product"><display-entity entity-name="Product" description="${internalName} [${productId}]"/></field>
+        <field name="productFeatureId" title="Feature"><display-entity entity-name="ProductFeature" description="${description} [${productFeatureId}]"/></field>
+        <field name="productFeatureApplTypeId" title="Type"><display-entity entity-name="ProductFeatureApplType"/></field>
+        <field name="fromDate" title="From Date"><display/></field>
+        <field name="deleteLink" title="Remove" widget-style="buttontext">
+            <hyperlink description="Remove" target="RemoveFeatureFromProduct">
+                <parameter param-name="productId"/>
+                <parameter param-name="productFeatureId"/>
+                <parameter param-name="fromDate"/>
+            </hyperlink>
+        </field>
+    </grid>
+
+
+    <!-- ======================================================== -->
+    <!-- PRODUCT FEATURES UI FORMS                                 -->
+    <!-- ======================================================== -->
+
+    <!-- Search Product Features -->
+    <form name="FindProductFeatures" type="single" target="FindProductFeature" default-entity-name="ProductFeature">
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="productFeatureId" title="Feature ID"><text-find/></field>
+        <field name="description" title="Description"><text-find/></field>
+        <field name="productFeatureTypeId" title="Feature Type">
+            <drop-down allow-empty="true">
+                <entity-options key-field-name="productFeatureTypeId" entity-name="ProductFeatureType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productFeatureCategoryId" title="Feature Category">
+            <drop-down allow-empty="true">
+                <entity-options key-field-name="productFeatureCategoryId" entity-name="ProductFeatureCategory" description="${description} [${productFeatureCategoryId}]">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="searchButton" title="Search"><submit/></field>
+    </form>
+
+    <!-- Grid to list Product Features -->
+    <grid name="ListProductFeatures" list-name="listIt" paginate-target="FindProductFeature" default-entity-name="ProductFeature"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="ProductFeature"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+            </service>
+        </actions>
+        <field name="productFeatureId" title="Feature ID" sort-field="true"><display/></field>
+        <field name="productFeatureTypeId" title="Type"><display-entity entity-name="ProductFeatureType"/></field>
+        <field name="productFeatureCategoryId" title="Category"><display-entity entity-name="ProductFeatureCategory" description="${description} [${productFeatureCategoryId}]"/></field>
+        <field name="description" title="Description" sort-field="true"><display/></field>
+    </grid>
+
+    <!-- Create Product Feature Form -->
+    <form name="CreateProductFeature" type="single" target="CreateProductFeature" title="Create Product Feature" default-entity-name="ProductFeature">
+        <field name="productFeatureId" title="Feature ID" required-field="true"><text size="20"/></field>
+        <field name="productFeatureTypeId" title="Feature Type" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productFeatureTypeId" entity-name="ProductFeatureType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productFeatureCategoryId" title="Feature Category">
+            <drop-down allow-empty="true">
+                <entity-options key-field-name="productFeatureCategoryId" entity-name="ProductFeatureCategory" description="${description} [${productFeatureCategoryId}]">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="description" title="Description" required-field="true"><text size="40"/></field>
+        <field name="submitButton" title="Create Feature"><submit button-type="button"/></field>
+    </form>
+
+
+    <!-- ======================================================== -->
+    <!-- PRODUCT CATEGORIES UI FORMS                              -->
+    <!-- ======================================================== -->
+
+    <!-- Search Product Categories -->
+    <form name="FindProductCategories" type="single" target="FindProductCategory" default-entity-name="ProductCategory">
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <field name="productCategoryId" title="Category ID"><text-find/></field>
+        <field name="categoryName" title="Category Name"><text-find/></field>
+        <field name="productCategoryTypeId" title="Category Type">
+            <drop-down allow-empty="true">
+                <entity-options key-field-name="productCategoryTypeId" entity-name="ProductCategoryType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="searchButton" title="Search"><submit/></field>
+    </form>
+
+    <!-- Grid to list Product Categories -->
+    <grid name="ListProductCategories" list-name="listIt" paginate-target="FindProductCategory" default-entity-name="ProductCategory"
+          odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="ProductCategory"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+            </service>
+        </actions>
+        <field name="productCategoryId" title="Category ID" sort-field="true"><display/></field>
+        <field name="productCategoryTypeId" title="Type"><display-entity entity-name="ProductCategoryType"/></field>
+        <field name="categoryName" title="Name" sort-field="true"><display/></field>
+        <field name="description" title="Description" sort-field="true"><display/></field>
+    </grid>
+
+    <!-- Create Product Category Form -->
+    <form name="CreateProductCategory" type="single" target="CreateProductCategory" title="Create Product Category" default-entity-name="ProductCategory">
+        <field name="productCategoryId" title="Category ID" required-field="true"><text size="20"/></field>
+        <field name="productCategoryTypeId" title="Category Type" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productCategoryTypeId" entity-name="ProductCategoryType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="categoryName" title="Category Name" required-field="true"><text size="30"/></field>
+        <field name="description" title="Description"><text size="50"/></field>
+        <field name="submitButton" title="Create Category"><submit button-type="button"/></field>
+    </form>
+
+    <!-- Create Category Rollup Form -->
+    <form name="CreateProductCategoryRollup" type="single" target="CreateProductCategoryRollup" title="Create Category Hierarchy Rollup" default-entity-name="ProductCategoryRollup">
+        <field name="parentProductCategoryId" title="Parent Category" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productCategoryId" entity-name="ProductCategory" description="${categoryName} [${productCategoryId}]">
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productCategoryId" title="Child Category" required-field="true">
+            <drop-down>
+                <entity-options key-field-name="productCategoryId" entity-name="ProductCategory" description="${categoryName} [${productCategoryId}]">
+                    <entity-order-by field-name="categoryName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="From Date" required-field="true"><date-time default-value="${nowTimestamp}"/></field>
+        <field name="submitButton" title="Rollup Category"><submit button-type="button"/></field>
+    </form>
+
+    <!-- List Category Rollups -->
+    <grid name="ListProductCategoryRollups" list-name="categoryRollups" default-entity-name="ProductCategoryRollup"
+          odd-row-style="alternate-row" default-table-style="basic-table hover-bar">
+        <actions>
+            <entity-condition entity-name="ProductCategoryRollup">
+                <order-by field-name="parentProductCategoryId"/>
+            </entity-condition>
+        </actions>
+        <field name="parentProductCategoryId" title="Parent Category"><display-entity entity-name="ProductCategory" key-field-name="productCategoryId" description="${categoryName} [${productCategoryId}]"/></field>
+        <field name="productCategoryId" title="Child Category"><display-entity entity-name="ProductCategory" key-field-name="productCategoryId" description="${categoryName} [${productCategoryId}]"/></field>
+        <field name="fromDate" title="From Date"><display/></field>
+        <field name="deleteLink" title="Remove" widget-style="buttontext">
+            <hyperlink description="Remove" target="RemoveProductCategoryRollup">
+                <parameter param-name="parentProductCategoryId"/>
+                <parameter param-name="productCategoryId"/>
+                <parameter param-name="fromDate"/>
+            </hyperlink>
+        </field>
+    </grid>
 
 </forms>

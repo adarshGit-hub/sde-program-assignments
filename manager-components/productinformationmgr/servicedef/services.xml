@@ -24,10 +24,7 @@ under the License.
     <vendor></vendor>
     <version>1.0</version>
 
-    <service name="noSyntaxError" engine="interface">
-        <description>
-            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
-        </description>
-    </service> 
+    <service name="createProductCategoryRollup" engine="entity-auto" invoke="create" default-entity-name="ProductCategoryRollup" auth="true"/>
+    <service name="removeProductCategoryRollup" engine="entity-auto" invoke="delete" default-entity-name="ProductCategoryRollup" auth="true"/> 
     
 </services>

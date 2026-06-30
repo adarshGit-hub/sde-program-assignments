@@ -21,14 +21,111 @@ under the License.
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
-    <screen name="main">
+    <!-- ======================================================== -->
+    <!-- PRODUCTS FIND & MANAGEMENT SCREEN                        -->
+    <!-- ======================================================== -->
+    <screen name="FindProduct">
         <section>
             <actions>
-                <set field="headerItem" value="main"/><!-- this highlights the selected menu-item with name "main" -->
+                <set field="headerItem" value="Products"/>
+                <set field="titleProperty" value="Products Management"/>
             </actions>
             <widgets>
                 <decorator-screen name="ProductinformationmgrCommonDecorator" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
+                        <!-- Find Products Section -->
+                        <screenlet title="Search Products">
+                            <include-form name="FindProducts" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+                        <screenlet title="Products List">
+                            <include-grid name="ListProducts" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+
+                        <!-- Horizontal Grid Layout for Action Panels -->
+                        <container style="grid-row">
+                            <container style="grid-col-6">
+                                <screenlet title="Create New Product">
+                                    <include-form name="CreateProduct" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                                </screenlet>
+                            </container>
+                            <container style="grid-col-6">
+                                <screenlet title="Apply Feature to Product">
+                                    <include-form name="ApplyFeatureToProduct" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                                </screenlet>
+                                <screenlet title="Add Product to Category">
+                                    <include-form name="AddProductToCategory" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                                </screenlet>
+                            </container>
+                        </container>
+
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- ======================================================== -->
+    <!-- PRODUCT FEATURES SCREEN                                  -->
+    <!-- ======================================================== -->
+    <screen name="FindProductFeature">
+        <section>
+            <actions>
+                <set field="headerItem" value="ProductFeatures"/>
+                <set field="titleProperty" value="Product Features Management"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="ProductinformationmgrCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="Search Features">
+                            <include-form name="FindProductFeatures" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+                        <screenlet title="Features List">
+                            <include-grid name="ListProductFeatures" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+                        <screenlet title="Create New Product Feature">
+                            <include-form name="CreateProductFeature" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- ======================================================== -->
+    <!-- PRODUCT CATEGORIES SCREEN                                -->
+    <!-- ======================================================== -->
+    <screen name="FindProductCategory">
+        <section>
+            <actions>
+                <set field="headerItem" value="ProductCategories"/>
+                <set field="titleProperty" value="Product Categories Management"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="ProductinformationmgrCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <screenlet title="Search Categories">
+                            <include-form name="FindProductCategories" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+                        <screenlet title="Categories List">
+                            <include-grid name="ListProductCategories" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
+                        
+                        <container style="grid-row">
+                            <container style="grid-col-6">
+                                <screenlet title="Create New Category">
+                                    <include-form name="CreateProductCategory" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                                </screenlet>
+                            </container>
+                            <container style="grid-col-6">
+                                <screenlet title="Assign Category Hierarchy Rollup">
+                                    <include-form name="CreateProductCategoryRollup" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                                </screenlet>
+                            </container>
+                        </container>
+
+                        <screenlet title="Current Category Rollup Tree (Hierarchy)">
+                            <include-grid name="ListProductCategoryRollups" location="component://productinformationmgr/widget/ProductinformationmgrForms.xml"/>
+                        </screenlet>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
