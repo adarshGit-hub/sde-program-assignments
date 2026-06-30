@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/entitymodel.xsd">
+
+    <title>Customer Management Entities</title>
+    <description>Find Customer View Entities for OFBiz Customer Management</description>
+
+    <view-entity entity-name="FindCustomerView"
+                 package-name="org.apache.ofbiz.customermanagement"
+                 title="View Entity for Finding Customers">
+        <member-entity entity-alias="PTY" entity-name="Party"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        
+        <!-- Primary Email Join -->
+        <member-entity entity-alias="PCME" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMPE" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="CME" entity-name="ContactMech"/>
+
+        <!-- Primary Phone Join -->
+        <member-entity entity-alias="PCMP" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMPP" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
+
+        <!-- Primary Postal Join -->
+        <member-entity entity-alias="PCMA" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="PCMPA" entity-name="PartyContactMechPurpose"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+
+        <alias-all entity-alias="PTY"/>
+        <alias-all entity-alias="PER"/>
+        
+        <!-- Email alias -->
+        <alias entity-alias="CME" name="emailAddress" field="infoString"/>
+        <alias entity-alias="PCMPE" name="emailPurpose" field="contactMechPurposeTypeId"/>
+
+        <!-- Phone alias -->
+        <alias entity-alias="TN" name="contactNumber"/>
+        <alias entity-alias="PCMPP" name="phonePurpose" field="contactMechPurposeTypeId"/>
+
+        <!-- Postal address aliases -->
+        <alias entity-alias="PA" name="toName"/>
+        <alias entity-alias="PA" name="address1"/>
+        <alias entity-alias="PA" name="city"/>
+        <alias entity-alias="PA" name="postalCode"/>
+        <alias entity-alias="PA" name="stateProvinceGeoId"/>
+        <alias entity-alias="PCMPA" name="addressPurpose" field="contactMechPurposeTypeId"/>
+
+        <!-- View Links -->
+        <view-link entity-alias="PTY" rel-entity-alias="PER">
+            <key-map field-name="partyId"/>
+        </view-link>
+
+        <!-- Email View Link -->
+        <view-link entity-alias="PTY" rel-entity-alias="PCME" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PCME" rel-entity-alias="PCMPE" rel-optional="true">
+            <key-map field-name="partyId"/>
+            <key-map field-name="contactMechId"/>
+            <entity-condition>
+                <condition-expr entity-alias="PCMPE" field-name="contactMechPurposeTypeId" operator="equals" value="EmailPrimary"/>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PCMPE" rel-entity-alias="CME" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+
+        <!-- Phone View Link -->
+        <view-link entity-alias="PTY" rel-entity-alias="PCMP" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PCMP" rel-entity-alias="PCMPP" rel-optional="true">
+            <key-map field-name="partyId"/>
+            <key-map field-name="contactMechId"/>
+            <entity-condition>
+                <condition-expr entity-alias="PCMPP" field-name="contactMechPurposeTypeId" operator="equals" value="PRIMARY_PHONE"/>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PCMPP" rel-entity-alias="TN" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+
+        <!-- Postal View Link -->
+        <view-link entity-alias="PTY" rel-entity-alias="PCMA" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PCMA" rel-entity-alias="PCMPA" rel-optional="true">
+            <key-map field-name="partyId"/>
+            <key-map field-name="contactMechId"/>
+            <entity-condition>
+                <condition-expr entity-alias="PCMPA" field-name="contactMechPurposeTypeId" operator="equals" value="PRIMARY_LOCATION"/>
+            </entity-condition>
+        </view-link>
+        <view-link entity-alias="PCMPA" rel-entity-alias="PA" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+    </view-entity>
+
+</entitymodel>

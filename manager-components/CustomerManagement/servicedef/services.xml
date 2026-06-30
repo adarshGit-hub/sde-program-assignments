@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/services.xsd">
+
+    <description>Customer Management Services</description>
+
+    <!-- Search/Find Customers -->
+    <service name="findCustomer" engine="groovy"
+             location="component://CustomerManagement/src/main/groovy/org/apache/ofbiz/customermanagement/CustomerServices.groovy" invoke="findCustomer">
+        <description>Dynamically searches for customers using FindCustomerView view-entity with case-insensitive and partial matches</description>
+        <attribute name="emailAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="firstName" type="String" mode="IN" optional="true"/>
+        <attribute name="lastName" type="String" mode="IN" optional="true"/>
+        <attribute name="contactNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="postalAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="viewIndex" type="Integer" mode="IN" optional="true"/>
+        <attribute name="viewSize" type="Integer" mode="IN" optional="true"/>
+        <attribute name="customerList" type="List" mode="OUT" optional="true"/>
+        <attribute name="listSize" type="Integer" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Create Customer -->
+    <service name="createCustomer" engine="groovy"
+             location="component://CustomerManagement/src/main/groovy/org/apache/ofbiz/customermanagement/CustomerServices.groovy" invoke="createCustomer">
+        <description>Create a new customer (Person + PartyContactMech + ContactMech) with EmailPrimary as unique key</description>
+        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
+        <attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="contactNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="postalAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="stateProvinceGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <!-- Update Customer -->
+    <service name="updateCustomer" engine="groovy"
+             location="component://CustomerManagement/src/main/groovy/org/apache/ofbiz/customermanagement/CustomerServices.groovy" invoke="updateCustomer">
+        <description>Update customer contact mech details (phone, postal address) identified by their unique primary email address</description>
+        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
+        <attribute name="contactNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="postalAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="stateProvinceGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <!-- Create Customer Relationship -->
+    <service name="createCustomerRelationship" engine="groovy"
+             location="component://CustomerManagement/src/main/groovy/org/apache/ofbiz/customermanagement/CustomerServices.groovy" invoke="createCustomerRelationship">
+        <description>Creates a relationship between two parties</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="roleTypeIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="true"/>
+    </service>
+
+    <!-- Update Customer Relationship -->
+    <service name="updateCustomerRelationship" engine="groovy"
+             location="component://CustomerManagement/src/main/groovy/org/apache/ofbiz/customermanagement/CustomerServices.groovy" invoke="updateCustomerRelationship">
+        <description>Modifies an existing relationship between two parties</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="roleTypeIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="thruDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
+    </service>
+
+</services>

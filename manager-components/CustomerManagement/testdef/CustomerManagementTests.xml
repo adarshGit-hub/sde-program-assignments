@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-suite suite-name="CustomerManagementTests"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/test-suite.xsd">
+    <test-case case-name="customer-management-tests">
+        <junit-test-suite class-name="org.apache.ofbiz.customermanagement.test.CustomerManagementTests"/>
+    </test-case>
+</test-suite>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!-- Define the EmailPrimary contact mechanism purpose type -->
+    <ContactMechPurposeType contactMechPurposeTypeId="EmailPrimary" description="Primary Email Address" hasTable="N"/>
+    <ContactMechTypePurpose contactMechPurposeTypeId="EmailPrimary" contactMechTypeId="EMAIL_ADDRESS"/>
+</entity-engine-xml>
