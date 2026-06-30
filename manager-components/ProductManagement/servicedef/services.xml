@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://ofbiz.apache.org/dtds/services.xsd">
+
+    <service name="findProduct" engine="groovy"
+             location="component://ProductManagement/src/main/groovy/org/apache/ofbiz/productmanagement/ProductServices.groovy" invoke="findProduct">
+        <description>Find products with filtering and pagination</description>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="productFeatureId" type="String" mode="IN" optional="true"/>
+        <attribute name="viewIndex" type="Integer" mode="IN" optional="true"/>
+        <attribute name="viewSize" type="Integer" mode="IN" optional="true"/>
+        <attribute name="productList" type="java.util.List" mode="OUT" optional="true"/>
+        <attribute name="listSize" type="Integer" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="createProduct" engine="groovy"
+             location="component://ProductManagement/src/main/groovy/org/apache/ofbiz/productmanagement/ProductServices.groovy" invoke="createProduct">
+        <description>Create a new product with custom validation</description>
+        <attribute name="productId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="internalName" type="String" mode="IN" optional="false"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="isVirtual" type="String" mode="IN" optional="true"/>
+        <attribute name="isVariant" type="String" mode="IN" optional="true"/>
+        <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="BigDecimal" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateProduct" engine="groovy"
+             location="component://ProductManagement/src/main/groovy/org/apache/ofbiz/productmanagement/ProductServices.groovy" invoke="updateProduct">
+        <description>Update an existing product with custom validation</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="internalName" type="String" mode="IN" optional="true"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="isVirtual" type="String" mode="IN" optional="true"/>
+        <attribute name="isVariant" type="String" mode="IN" optional="true"/>
+        <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="price" type="BigDecimal" mode="IN" optional="true"/>
+    </service>
+
+    <service name="assocProductToVirtual" engine="groovy"
+             location="component://ProductManagement/src/main/groovy/org/apache/ofbiz/productmanagement/ProductServices.groovy" invoke="assocProductToVirtual">
+        <description>Associate a variant product to a virtual parent product</description>
+        <attribute name="virtualProductId" type="String" mode="IN" optional="false"/>
+        <attribute name="variantProductId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="updateProductVariant" engine="groovy"
+             location="component://ProductManagement/src/main/groovy/org/apache/ofbiz/productmanagement/ProductServices.groovy" invoke="updateProductVariant">
+        <description>Update variant product details, price, and features</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="price" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="productFeatureId" type="String" mode="IN" optional="true"/>
+    </service>
+</services>

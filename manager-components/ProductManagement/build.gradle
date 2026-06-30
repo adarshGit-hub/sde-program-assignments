@@ -1,0 +1,15 @@
+dependencies {
+    // Examples of compile-time and runtime dependencies
+}
+
+task install {
+    doLast {
+        // Install logic for this plugin
+    }
+}
+
+task uninstall {
+    doLast {
+        // Uninstall logic for this plugin
+    }
+}
