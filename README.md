@@ -13,6 +13,8 @@ Contains SQL query exercises related to an Order Management System (OMS) databas
 
 ### 2. [Manager Components](./manager-components)
 Custom components built for Apache OFBiz:
+- **[CustomerManagement/](./manager-components/CustomerManagement)**: A component designed for customer information, profiles, and relationship management.
+- **[ProductManagement/](./manager-components/ProductManagement)**: A component designed for product catalog and features management.
 - **[ordermgmtsystem/](./manager-components/ordermgmtsystem)**: A component designed for Order Management System functionalities.
 - **[productinformationmgr/](./manager-components/productinformationmgr)**: A component designed for Product Information Management (PIM). Contains standard OFBiz component directories (`entitydef`, `servicedef`, `webapp`, `widget`, etc.).
 - **[relationshipmgr/](./manager-components/relationshipmgr)**: A component designed for managing business relationships, customer data, or CRM functionalities.
@@ -21,6 +23,7 @@ Custom components built for Apache OFBiz:
 Reports and documentation for assignments:
 - **[OFBiz_Order_Fulfillment_Report.pdf](./activity-assignments/OFBiz_Order_Fulfillment_Report.pdf)**: A detailed report on order fulfillment processes in Apache OFBiz.
 - **[company-store-product-catalog-assignment.pdf](./activity-assignments/company-store-product-catalog-assignment.pdf)**: An assignment focused on creating and managing a product catalog for a company store.
+- **[multi-carrier-api-integration-assignment.md](./activity-assignments/multi-carrier-api-integration-assignment.md)**: Technical discovery matrix for integrating FedEx (REST), ShipHawk, and Canada Post (REST) APIs into a unified shipping aggregator.
 
 ### 4. [Entity Flows](./entity-flows/order_from_shopify)
 Details the database table creation, insertion, and update flows in Apache OFBiz / Moqui during the Shopify order lifecycle:
