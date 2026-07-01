@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://moqui.org/xsd/service-definition-3.xsd">
+
+    <!-- ========================================== -->
+    <!-- SQL Assignment 1 Services                  -->
+    <!-- ========================================== -->
+
+    <!-- Q1: New Customers Acquired -->
+    <service verb="get" noun="A1Q01NewCustomers" authenticate="false">
+        <in-parameters>
+            <parameter name="fromDate" default-value="2023-06-01 00:00:00.000"/>
+            <parameter name="thruDate" default-value="2023-06-30 23:59:59.999"/>
+        </in-parameters>
+        <out-parameters>
+            <parameter name="resultList" type="List"/>
+            <parameter name="sqlQuery" type="String"/>
+        </out-parameters>
+        <actions>
+            <script><![CDATA[
+                import org.moqui.entity.EntityFind
+                import org.moqui.entity.EntityDynamicView
+                import org.moqui.entity.EntityCondition
+                import org.moqui.entity.OmsQueryUtil
+
+
+                EntityFind find = ec.entity.find(null)
+                EntityDynamicView dv = find.makeEntityDynamicView()
+                dv.addMemberEntity("PER", "org.apache.ofbiz.party.party.Person", null, null, null)
+                dv.addMemberEntity("PR", "org.apache.ofbiz.party.party.PartyRole", "PER", false, [partyId: "partyId"])
+                dv.addMemberEntity("PCM", "org.apache.ofbiz.party.contact.PartyContactMech", "PER", true, [partyId: "partyId"])
+                dv.addMemberEntity("CM", "org.apache.ofbiz.party.contact.ContactMech", "PCM", true, [contactMechId: "contactMechId"])
+                dv.addMemberEntity("TN", "org.apache.ofbiz.party.contact.TelecomNumber", "PCM", true, [contactMechId: "contactMechId"])
+
+
+                dv.addAlias("PER", "customerId", "partyId", null)
+                dv.addAlias("PER", "firstName", "firstName", null)
+                dv.addAlias("PER", "lastName", "lastName", null)
+                dv.addAlias("PER", "signupDate", "createdStamp", null)
+                dv.addAlias("PR", "roleTypeId", "roleTypeId", null)
+                dv.addAlias("CM", "emailAddress", "infoString", null)
+                dv.addAlias("TN", "contactNumber", "contactNumber", null)
+
+
+                find.condition("roleTypeId", "CUSTOMER")
+                find.condition("signupDate", "between", [fromTs, thruTs])
+                def sqlResult = OmsQueryUtil.renderSql(find)
+                sqlQuery = "${sqlResult.sql} | Parameters: ${sqlResult.parameters}"
+                resultList = find.list()
+            ]]></script>
+        </actions>
+    </service>
+
+    <!-- Q2: Active Physical Products -->
+    <service verb="get" noun="A1Q02ActivePhysicalProducts" authenticate="false">
+        <out-parameters>
+            <parameter name="resultList" type="List"/>
+            <parameter name="sqlQuery" type="String"/>
+        </out-parameters>
+        <actions>
+            <script><![CDATA[
+                import org.moqui.entity.EntityFind
+                import org.moqui.entity.EntityDynamicView
+                import org.moqui.entity.EntityCondition
+                import co.hotwax.oms.util.OmsQueryUtil
+                import java.sql.Timestamp
+
+                Timestamp now = new Timestamp(System.currentTimeMillis())
+
+                EntityFind find = ec.entity.find(null)
+                EntityDynamicView dynamicView = find.makeEntityDynamicView()
+                dynamicView.addMemberEntity("P", "org.apache.ofbiz.product.product.Product", null, null, null)
+                dynamicView.addMemberEntity("PT", "org.apache.ofbiz.product.product.ProductType", "P", false, [productTypeId: "productTypeId"])
+
+                dynamicView.addAlias("P", "productId", "productId", null)
+                dynamicView.addAlias("P", "internalName", "internalName", null)
+                dynamicView.addAlias("P", "productTypeId", "productTypeId", null)
+                dynamicView.addAlias("P", "supportDiscontinuationDate", "supportDiscontinuationDate", null)
+                dynamicView.addAlias("PT", "isPhysical", "isPhysical", null)
+                dynamicView.addAlias("PT", "isDigital", "isDigital", null)
+
+                find.condition("isPhysical", "Y")
+                find.condition(ec.entity.conditionFactory.makeCondition([
+                    ec.entity.conditionFactory.makeCondition("supportDiscontinuationDate", EntityCondition.EQUALS, null),
+                    ec.entity.conditionFactory.makeCondition("supportDiscontinuationDate", EntityCondition.GREATER_THAN, now)
+                ], EntityCondition.OR))
+
+                def sqlResult = OmsQueryUtil.renderSql(find)
+                sqlQuery = "${sqlResult.sql} | Parameters: ${sqlResult.parameters}"
+                resultList = find.list()
+            ]]></script>
+        </actions>
+    </service>
+
+</services>
