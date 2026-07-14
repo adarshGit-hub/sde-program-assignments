@@ -77,19 +77,41 @@
                 dynamicView.addAlias("P", "productTypeId", "productTypeId", null)
                 dynamicView.addAlias("P", "supportDiscontinuationDate", "supportDiscontinuationDate", null)
                 dynamicView.addAlias("PT", "isPhysical", "isPhysical", null)
-                dynamicView.addAlias("PT", "isDigital", "isDigital", null)
 
                 find.condition("isPhysical", "Y")
                 find.condition(ec.entity.conditionFactory.makeCondition([
-                    ec.entity.conditionFactory.makeCondition("supportDiscontinuationDate", EntityCondition.EQUALS, null),
-                    ec.entity.conditionFactory.makeCondition("supportDiscontinuationDate", EntityCondition.GREATER_THAN, now)
+                    ec.entity.conditionFactory.makeCondition("supportDiscontinuationDate", null),
+                    ec.entity.conditionFactory.makeCondition("supportDiscontinuationDate", "greater-than", now)
                 ], EntityCondition.OR))
 
-                def sqlResult = OmsQueryUtil.renderSql(find)
-                sqlQuery = "${sqlResult.sql} | Parameters: ${sqlResult.parameters}"
+                EntityFindBase findBase = (EntityFindBase) find
+                def ed = findBase.getEntityDef()
+                def whereCond = findBase.getWhereEntityCondition()
+
+                FieldInfo[] fieldInfoArray = ed.entityInfo.allFieldInfoArray
+                FieldOrderOptions[] fieldOptionsArray = null
+
+                EntityFindBuilder efb = new EntityFindBuilder(ed, findBase, whereCond, fieldInfoArray)
+                efb.makeSqlSelectFields(fieldInfoArray, fieldOptionsArray, false)
+                efb.makeSqlFromClause()
+                efb.makeWhereClause()
+
+                String renderedSql = efb.sqlTopLevel.toString()
+                <!-- String formattedSql = renderedSql
+                    .replaceAll(" SELECT ", "\nSELECT ")
+                    .replaceAll(", ", ", \n    ")
+                    .replaceAll(" FROM ", "\nFROM ")
+                    .replaceAll(" ON ", "\n    ON ")
+                    .replaceAll(" WHERE ", "\nWHERE ")
+                    .replaceAll(" LEFT JOIN ", "\nLEFT JOIN ")
+                    .replaceAll(" AND ", "\n    AND ")
+                    .replaceAll(" ORDER BY ", "\nORDER BY "); -->
+
+                <!-- ec.logger.info("======== INTERCEPTED SQL (Formatted):\n" + formattedSql) -->
+                def paramValues = efb.parameters?.collect { it.value } ?: []
+                sqlQuery = "${renderedSql} | Parameters: ${paramValues}"
                 resultList = find.list()
             ]]></script>
         </actions>
     </service>
-
 </services>
