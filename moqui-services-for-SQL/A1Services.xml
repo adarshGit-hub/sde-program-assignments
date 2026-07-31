@@ -97,17 +97,7 @@
                 efb.makeWhereClause()
 
                 String renderedSql = efb.sqlTopLevel.toString()
-                <!-- String formattedSql = renderedSql
-                    .replaceAll(" SELECT ", "\nSELECT ")
-                    .replaceAll(", ", ", \n    ")
-                    .replaceAll(" FROM ", "\nFROM ")
-                    .replaceAll(" ON ", "\n    ON ")
-                    .replaceAll(" WHERE ", "\nWHERE ")
-                    .replaceAll(" LEFT JOIN ", "\nLEFT JOIN ")
-                    .replaceAll(" AND ", "\n    AND ")
-                    .replaceAll(" ORDER BY ", "\nORDER BY "); -->
-
-                <!-- ec.logger.info("======== INTERCEPTED SQL (Formatted):\n" + formattedSql) -->
+                
                 def paramValues = efb.parameters?.collect { it.value } ?: []
                 sqlQuery = "${renderedSql} | Parameters: ${paramValues}"
                 resultList = find.list()
